@@ -64,6 +64,9 @@ static NSBundle* g_defaultBundle;
     return [self urlForPath:path bundle:g_defaultBundle];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-argument"
+
 + (NSURL*) urlForPath:(NSString*) path bundle:(NSBundle*) bundle
 {
 	if(nil == path)
@@ -80,6 +83,8 @@ static NSBundle* g_defaultBundle;
 	
 	return [NSURL fileURLWithPath:fullPath];
 }
+
+#pragma clang diagnostic pop
 
 + (void) notifyExtAudioError:(OSStatus)errorCode
 				 function:(const char*) function
