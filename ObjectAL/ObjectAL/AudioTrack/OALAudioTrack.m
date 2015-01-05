@@ -330,7 +330,6 @@
     [player setVolume:left rightVolume:right];
 }
 
-@bridge (callback) onCompletion: = onCompletion;
 - (void)onCompletion:(AndroidMediaPlayer *)mp {
     if (mp != player) {
         return;
@@ -778,7 +777,10 @@
             [assetFd close];
         }
 
-        [player setOnCompletionListener:self];
+        __weak id weakSelf = self;
+        [player setOnCompletionListener:[AndroidMediaPlayerOnCompletionListener listenerWithBlock:^(AndroidMediaPlayer *mp) {
+            [weakSelf onCompletion:mp];
+        }]];
 #endif
 		as_release(currentlyLoadedUrl);
 		currentlyLoadedUrl = as_retain(url);
