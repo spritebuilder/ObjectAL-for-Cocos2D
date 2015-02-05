@@ -50,7 +50,6 @@
 		reduceToMono = reduceToMonoIn;
 
 		OSStatus error = 0;
-		UInt32 size;
 		
 		if(nil == url)
 		{
@@ -59,6 +58,8 @@
 		}
 
 #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
+        UInt32 size;
+        
 		// Open the file
 		if(noErr != (error = ExtAudioFileOpenURL((as_bridge CFURLRef)url, &fileHandle)))
 		{
@@ -144,7 +145,7 @@
 		// Get info
 		vorbis_info *info = ov_info(&oggFile, -1);
 		if (info) {
-			channelsPerFrame = info->channels;
+			channelsPerFrame = (UInt32)info->channels;
 			sampleRate = (UInt32)info->rate;
 			bitsPerChannel = 16;
 			bytesPerFrame = (channelsPerFrame * bitsPerChannel) / 8;
@@ -320,9 +321,8 @@
 			free(streamData);
 		}
 		return nil;
+        
 #elif __CC_PLATFORM_ANDROID
-		UInt32 numFramesRead;
-		UInt32 bufferOffset = 0;
 		// < 0 means read to the end of the file.
 		if(numFrames < 0)
 		{
@@ -351,7 +351,7 @@
 		int chunkSize = 0;
 		UInt32 bytesToRead = (UInt32) numFrames * bytesPerFrame;
 		UInt32 bytesRead = 0;
-		for(bytesRead = 0; bytesRead < bytesToRead; bytesRead += chunkSize)
+		for(bytesRead = 0; bytesRead < bytesToRead; bytesRead += (UInt32)chunkSize)
 		{
 			chunkSize = (int) ov_read(&oggFile,
 								(char*)(streamData + bytesRead),
