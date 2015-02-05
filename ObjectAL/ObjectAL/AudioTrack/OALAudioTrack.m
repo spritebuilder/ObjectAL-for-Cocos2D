@@ -875,7 +875,7 @@
 	return [self playUrl:[OALTools urlForPath:path] loops:loops];
 #elif __CC_PLATFORM_ANDROID
     NSURL *url = [NSURL fileURLWithPath:path];
-	return [self playUrl:[NSURL fileURLWithPath:path] loops:loops];
+	return [self playUrl:url loops:loops];
 #endif
 }
 
@@ -948,6 +948,9 @@
         paused = NO;
         playing = [player playAtTime:time];
 #elif __CC_PLATFORM_ANDROID
+        //suppress unused var warning
+        (void)time;
+        
         [player stop];
         [player seekToMsec:(int32_t)(currentTime * 1000)];
         [self _updateVolume];
@@ -1126,6 +1129,9 @@
 #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
 		return [player averagePowerForChannel:channelNumber];
 #else
+        //suppress unused var warning
+        (void)channelNumber;
+        
         return 1;
 #endif
 	}
@@ -1138,6 +1144,9 @@
 #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
 		return [player peakPowerForChannel:channelNumber];
 #else
+        //suppress unused var warning
+        (void)channelNumber;
+        
         return 1;
 #endif
 	}
