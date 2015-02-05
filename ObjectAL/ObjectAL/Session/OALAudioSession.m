@@ -803,7 +803,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 
 		self.audioSessionActive = YES;
 #if __CC_PLATFORM_ANDROID
-        [[CCDirector sharedDirector] addObserver:self
+        [[CCDirector currentDirector] addObserver:self
                                       forKeyPath:@"isPaused"
                                          options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld)
                                          context:NULL];
@@ -842,8 +842,13 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
+    //suppress unused variable warnings
+    (void)object;
+    (void)change;
+    (void)context;
+    
     if ([keyPath isEqual:@"isPaused"]) {
-        if ([[CCDirector sharedDirector] isPaused]) {
+        if ([[CCDirector currentDirector] isPaused]) {
             [self setManuallySuspended:YES];
         } else {
             [self setManuallySuspended:NO];
