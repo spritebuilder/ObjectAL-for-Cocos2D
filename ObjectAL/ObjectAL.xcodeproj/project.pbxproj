@@ -1245,6 +1245,7 @@
 				DSTROOT = /tmp/ObjectAL__iOS_.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOS/ObjectAL (iOS)-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1262,6 +1263,7 @@
 				DSTROOT = /tmp/ObjectAL__iOS_.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iOS/ObjectAL (iOS)-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
