@@ -72,7 +72,7 @@ BRIDGE_CLASS("com.spritebuilder.OALAudioTrack")
 	float pan;
 	NSInteger numberOfLoops;
 #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
-	id<AVAudioPlayerDelegate> delegate; // Weak reference
+	id delegate; // Weak reference // RAG: 8Apr19 - Remove <AVAudioPlayerDelegate> to get rid of a ton of warnings
 #else
     id delegate;
 #endif
