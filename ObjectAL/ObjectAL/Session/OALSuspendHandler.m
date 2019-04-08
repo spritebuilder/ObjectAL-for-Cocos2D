@@ -26,6 +26,7 @@
 //
 // Attribution is not required, but appreciated :)
 //
+//#define OBJC_OLD_DISPATCH_PROTOTYPES 1
 
 #import "OALSuspendHandler.h"
 #import "NSMutableArray+WeakReferences.h"
@@ -153,7 +154,9 @@
 			{
 				if(nil != suspendStatusChangeTarget)
 				{
-					objc_msgSend(suspendStatusChangeTarget, suspendStatusChangeSelector, manualSuspendLock);
+					// From https://stackoverflow.com/a/25853741/701926 to work around some strict changes in the warnings about untyped calls to objc_msgSend
+					void (*typed_msgSend)(id, SEL, bool) = (void *)objc_msgSend;
+					typed_msgSend(suspendStatusChangeTarget, suspendStatusChangeSelector, manualSuspendLock);
 				}
 			}
 		}

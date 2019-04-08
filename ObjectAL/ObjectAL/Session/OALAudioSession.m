@@ -665,6 +665,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
         case AVAudioSessionInterruptionTypeBegan:
             [self beginInterruption];
             break;
+			
         case AVAudioSessionInterruptionTypeEnded:
         {
             NSUInteger options = [[notification.userInfo objectForKey:@"AVAudioSessionInterruptionOptionKey"] unsignedIntegerValue];

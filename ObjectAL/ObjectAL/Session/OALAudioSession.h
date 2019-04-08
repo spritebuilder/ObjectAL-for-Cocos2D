@@ -42,7 +42,7 @@
  * Handles the audio session and interrupts.
  */
 #if __CC_PLATFORM_IOS
-@interface OALAudioSession : NSObject <AVAudioSessionDelegate, OALSuspendManager>
+@interface OALAudioSession : NSObject <OALSuspendManager> // Removed AVAudioSessionDelegate 8Apr19 to get rid of copious warnings - since 6.0 it has used notifications anyway
 #else
 @interface OALAudioSession : NSObject <OALSuspendManager>
 #endif
@@ -145,7 +145,7 @@
 #if __CC_PLATFORM_IOS
 /** Delegate that will receive all audio session events (WEAK reference).
  */
-@property(nonatomic,readwrite,assign) id<AVAudioSessionDelegate> audioSessionDelegate;
+@property(nonatomic,readwrite,assign) id audioSessionDelegate; // RAG: 8Apr19 - Removed <AVAudioSessionDelegate> to get rid of a load of warnings
 #elif __CC_PLATFORM_ANDROID
 #warning audioSessionDelegate not implemented
 #endif
