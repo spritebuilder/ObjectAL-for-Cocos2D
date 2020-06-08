@@ -261,6 +261,7 @@
     player.delegate = nil;
 #elif __CC_PLATFORM_ANDROID
     [player setOnCompletionListener:nil];
+    [player removeRef];
 #endif
     [player stop];
 
@@ -777,17 +778,18 @@
             [assetFd close];
         }
 
-        __weak id weakSelf = self;
+        __weak typeof (self) weakSelf = self;
         [player setOnCompletionListener:[AndroidMediaPlayerOnCompletionListener listenerWithBlock:^(AndroidMediaPlayer *mp) {
-            [weakSelf onCompletion:mp];
+            __strong typeof (self) strongSelf = weakSelf;
+            [strongSelf onCompletion:mp];
         }]];
 #endif
 		as_release(currentlyLoadedUrl);
 		currentlyLoadedUrl = as_retain(url);
-		
-		self.currentTime = seekTime;
-		playing = NO;
-		paused = NO;
+        
+        self.currentTime = seekTime;
+        playing = NO;
+        paused = NO;
 
 #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
 		BOOL allOK = [player prepareToPlay];
@@ -815,7 +817,11 @@
 
 - (bool) preloadFile:(NSString*) path seekTime:(NSTimeInterval)seekTime
 {
-	return [self preloadUrl:[OALTools urlForPath:path] seekTime:seekTime];
+    #if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
+        return [self preloadUrl:[OALTools urlForPath:path] seekTime:seekTime];
+    #elif __CC_PLATFORM_ANDROID
+        return [self preloadUrl:[NSURL fileURLWithPath:path] seekTime:seekTime];
+    #endif
 }
 
 - (bool) preloadUrlAsync:(NSURL*) url target:(id) target selector:(SEL) selector
@@ -839,7 +845,11 @@
 
 - (bool) preloadFileAsync:(NSString*) path seekTime:(NSTimeInterval)seekTime target:(id) target selector:(SEL) selector
 {
-	return [self preloadUrlAsync:[OALTools urlForPath:path] seekTime:seekTime target:target selector:selector];
+#if __CC_PLATFORM_IOS || __CC_PLATFORM_MAC
+    return [self preloadUrlAsync:[OALTools urlForPath:path] seekTime:seekTime target:target selector:selector];
+#elif __CC_PLATFORM_ANDROID
+    return [self preloadUrlAsync:[NSURL fileURLWithPath:path] seekTime:seekTime target:target selector:selector];
+#endif
 }
 
 - (bool) playUrl:(NSURL*) url
@@ -952,6 +962,7 @@
         (void)time;
         
         [player stop];
+        [player prepare];
         [player seekToMsec:(int32_t)(currentTime * 1000)];
         [self _updateVolume];
         [player setLooping:(-1 == numberOfLoops) ? YES : NO];
